@@ -21,12 +21,6 @@ public class Main {
 
 		System.out.println(tm);
 
-//		Subtask subtask2Updated = new Subtask("subtask2-Updated", "subtask2-description1-Updated");
-//		subtask2Updated.setId(subtask2.getId());
-//		subtask2Updated.setEpicId(epic.getId());
-//		subtask2Updated.setStatuses(TaskStatuses.IN_PROGRESS);
-//		tm.updateItem(subtask2Updated);
-
 		Task tempTask = tm.getItemById(3);
 		if (tempTask != null && tempTask.getTaskType() == TaskTypes.SUBTASK) {
 			Subtask subtask1 = (Subtask) tempTask;
