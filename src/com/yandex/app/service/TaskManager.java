@@ -197,9 +197,11 @@ public class TaskManager {
 				newStatus = TaskStatuses.IN_PROGRESS;
 			}
 		}
-		Epic newEpic = new Epic(epic.getName(), epic.getDescription(), newStatus, epic.getSubtaskIds());
-		newEpic.setId(epic.getId());
-		updateItem(newEpic);
+		if (epic.getStatus() != newStatus) {
+			Epic newEpic = new Epic(epic.getName(), epic.getDescription(), newStatus, epic.getSubtaskIds());
+			newEpic.setId(epic.getId());
+			updateItem(newEpic);
+		}
 	}
 	//endregion
 
