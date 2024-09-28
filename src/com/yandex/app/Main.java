@@ -1,4 +1,7 @@
-import taskManager.*;
+package com.yandex.app;
+
+import com.yandex.app.model.*;
+import com.yandex.app.service.TaskManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,15 +12,15 @@ public class Main {
 		System.out.println("Поехали!");
 
 		TaskManager tm = new TaskManager();
-		tm.addItem(new Task("task1", "task1-description1"));
+		tm.addNewItem(new Task("task1", "task1-description1"));
 
 		Epic epic = new Epic("epic1", "epic1-description1");
-		tm.addItem(epic);
-		tm.addItem(new Subtask("subtask1", "subtask1-description1", TaskStatuses.NEW, epic.getId()));
+		tm.addNewItem(epic);
+		tm.addNewItem(new Subtask("subtask1", "subtask1-description1", TaskStatuses.NEW, epic.getId()));
 
 		Subtask subtask2 = new Subtask("subtask2", "subtask2-description1");
 		subtask2.setEpicId(epic.getId());
-		tm.addItem(subtask2);
+		tm.addNewItem(subtask2);
 
 		System.out.println(tm);
 
@@ -31,18 +34,19 @@ public class Main {
 
 		System.out.println(tm);
 
-		HashMap<Integer, Task> tasks = tm.getTasks();
-		HashMap<Integer, Subtask> subtasks = tm.getSubtasks();
-		HashMap<Integer, Epic> epics = tm.getEpics();
+		ArrayList<Task> tasks = tm.getTasks();
+		ArrayList<Subtask> subtasks = tm.getSubtasks();
+		ArrayList<Epic> epics = tm.getEpics();
 		ArrayList<Subtask> epicSubtasks = tm.getEpicTasksById(epic.getId());
 
-		HashMap<Integer, Task> allItems = tm.getAllItems();
+		ArrayList<Task> allItems = tm.getAllItems();
 
 		tm.deleteItemById(4);
+		System.out.println(tm);
 
 		Subtask subtask3 = new Subtask("subtask3", "subtask2-description3");
 		subtask3.setEpicId(epic.getId());
-		tm.addItem(subtask3);
+		tm.addNewItem(subtask3);
 
 		System.out.println(tm);
 

@@ -1,9 +1,8 @@
-package taskManager;
+package com.yandex.app.model;
 
 import java.util.Objects;
 
 public class Task {
-	protected final TaskTypes taskType;
 	protected int id;
 	protected String name;
 	protected String description;
@@ -13,21 +12,12 @@ public class Task {
 		this.name = name;
 		this.description = description;
 		this.status = TaskStatuses.NEW;
-		this.taskType = TaskTypes.TASK;
 	}
 
 	public Task(String name, String description, TaskStatuses status) {
 		this.name = name;
 		this.description = description;
 		this.status = status;
-		this.taskType = TaskTypes.TASK;
-	}
-
-	protected Task(String name, String description, TaskStatuses status, TaskTypes taskType) {
-		this.name = name;
-		this.description = description;
-		this.status = status;
-		this.taskType = taskType;
 	}
 
 	public int getId() {
@@ -41,7 +31,7 @@ public class Task {
 		return true;
 	}
 	public TaskTypes getTaskType() {
-		return this.taskType;
+		return TaskTypes.TASK;
 	}
 	public TaskStatuses getStatus() {
 		return this.status;
