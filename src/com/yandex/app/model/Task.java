@@ -36,9 +36,6 @@ public class Task {
 	public TaskStatuses getStatus() {
 		return this.status;
 	}
-	protected void setStatuses(TaskStatuses status) {
-		this.status = status;
-	}
 	public String getName() {
 		return name;
 	}
