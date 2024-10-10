@@ -1,4 +1,4 @@
-package com.yandex.app.service.taskManagers;
+package com.yandex.app.service;
 
 import com.yandex.app.model.Epic;
 import com.yandex.app.model.Subtask;

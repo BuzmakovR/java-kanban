@@ -1,18 +1,20 @@
-package com.yandex.app.service.taskManagers;
+package com.yandex.app.service.impl;
 
 import com.yandex.app.model.*;
 import com.yandex.app.service.Managers;
-import com.yandex.app.service.historyManagers.HistoryManager;
+import com.yandex.app.service.HistoryManager;
+import com.yandex.app.service.TaskManager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 public class InMemoryTaskManager implements TaskManager {
 	private int nextId;
-	private final HashMap<Integer, Task> tasks;
-	private final HashMap<Integer, Subtask> subtasks;
-	private final HashMap<Integer, Epic> epics;
+	private final Map<Integer, Task> tasks;
+	private final Map<Integer, Subtask> subtasks;
+	private final Map<Integer, Epic> epics;
 	private final HistoryManager historyManager;
 
 	public InMemoryTaskManager() {

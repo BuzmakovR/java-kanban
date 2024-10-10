@@ -1,4 +1,4 @@
-package com.yandex.app.service.historyManagers;
+package com.yandex.app.service.impl;
 import com.yandex.app.model.Task;
 import org.junit.jupiter.api.Test;
 import java.util.List;
@@ -19,5 +19,21 @@ public class InMemoryHistoryManagerTest {
 		}
 		List<Task> history = hm.getHistory();
 		assertEquals(historyLimit, history.size(), "Длина списка истории не равна ограничению");
+	}
+	@Test
+	void addingItemToEndList() {
+		InMemoryHistoryManager hm = new InMemoryHistoryManager();
+
+		Task task1 = new Task("task1", "desc1");
+		task1.setId(1);
+		hm.add(task1);
+
+		Task task2 = new Task("task2", "desc2");
+		task2.setId(2);
+		hm.add(task2);
+
+		List<Task> history = hm.getHistory();
+		Task lastTask = history.getLast();
+		assertEquals(task2, lastTask, "Задачи в историю добавляются не в конец списка");
 	}
 }

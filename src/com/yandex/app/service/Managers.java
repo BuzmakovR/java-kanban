@@ -1,7 +1,7 @@
 package com.yandex.app.service;
 
-import com.yandex.app.service.taskManagers.*;
-import com.yandex.app.service.historyManagers.*;
+import com.yandex.app.service.impl.InMemoryHistoryManager;
+import com.yandex.app.service.impl.InMemoryTaskManager;
 
 public class Managers {
 

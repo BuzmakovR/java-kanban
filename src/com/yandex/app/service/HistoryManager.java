@@ -1,4 +1,4 @@
-package com.yandex.app.service.historyManagers;
+package com.yandex.app.service;
 
 import java.util.List;
 

@@ -2,11 +2,7 @@ package com.yandex.app;
 
 import com.yandex.app.model.*;
 import com.yandex.app.service.Managers;
-import com.yandex.app.service.taskManagers.InMemoryTaskManager;
-import com.yandex.app.service.taskManagers.TaskManager;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.yandex.app.service.TaskManager;
 
 public class Main {
 
@@ -35,31 +31,11 @@ public class Main {
 			tm.updateItem(subtask1Updated);
 		}
 
-//		System.out.println(tm);
-
-//		ArrayList<Task> tasks = tm.getTasks();
-//		ArrayList<Subtask> subtasks = tm.getSubtasks();
-//		ArrayList<Epic> epics = tm.getEpics();
-//		ArrayList<Subtask> epicSubtasks = tm.getEpicTasksById(epic.getId());
-
-//		List<Task> allItems = tm.getAllItems();
-//
-//		tm.deleteItemById(4);
-//		System.out.println(tm);
-
 		Subtask subtask3 = new Subtask("subtask3", "subtask2-description3");
 		subtask3.setEpicId(epic.getId());
 		tm.addNewItem(subtask3);
 
-//		System.out.println(tm);
-
-//		ArrayList<Subtask> epicSubtasks2 = tm.getEpicTasksById(2);
-//		tm.deleteAllItems();
-
-//		System.out.println(tm);
-
 		printAllTasks(tm);
-
 	}
 
 	private static void printAllTasks(TaskManager manager) {

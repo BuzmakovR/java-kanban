@@ -1,4 +1,4 @@
-package com.yandex.app.service.taskManagers;
+package com.yandex.app.service.impl;
 
 import com.yandex.app.model.Epic;
 import com.yandex.app.model.Subtask;
@@ -20,7 +20,6 @@ public class InMemoryTaskManagerTest {
 		assertNotNull(tm, "Не инициализирован экземпляр класса InMemoryTaskManager");
 		assertNotNull(tm.getTasks(), "Не инициализирован список задач в InMemoryTaskManager");
 		assertNotNull(tm.getSubtasks(), "Не инициализирован список подзадач в InMemoryTaskManager");
-		assertNotNull(tm.getEpics(), "Не инициализирован список эпиков в InMemoryTaskManager");
 		assertNotNull(tm.getEpics(), "Не инициализирован список эпиков в InMemoryTaskManager");
 		assertNotNull(tm.getHistoryManager(), "Не инициализирован HistoryManager в InMemoryTaskManager");
 	}
@@ -106,10 +105,10 @@ public class InMemoryTaskManagerTest {
 		assertEquals(epic.getStatus(), TaskStatuses.NEW, "Эпик с новыми подзадачами должен быть в статусе NEW");
 		tm.deleteItemById(subtask1.getId());
 		epic = tm.getItemById(epic.getId());
-		assertEquals(epic.getStatus(), TaskStatuses.NEW, "Эпик с новыми подзадачами должен быть в статусе NEW");
+		assertEquals(epic.getStatus(), TaskStatuses.NEW, "Эпик без подзадач должен быть в статусе NEW");
 		tm.deleteAllSubtask();
 		epic = tm.getItemById(epic.getId());
-		assertEquals(epic.getStatus(), TaskStatuses.NEW, "Эпик с новыми подзадачами должен быть в статусе NEW");
+		assertEquals(epic.getStatus(), TaskStatuses.NEW, "Эпик без подзадач должен быть в статусе NEW");
 	}
 	@Test
 	void managerMustSetInProgressEpicStatus() {
