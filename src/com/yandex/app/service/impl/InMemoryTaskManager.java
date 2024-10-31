@@ -62,6 +62,7 @@ public class InMemoryTaskManager implements TaskManager {
 		tasks.remove(id);
 		deleteSubtaskById(id);
 		deleteEpicById(id);
+		historyManager.remove(id);
 	}
 	@Override
 	public void deleteAllItems(){
@@ -69,6 +70,7 @@ public class InMemoryTaskManager implements TaskManager {
 		deleteAllEpics();
 		// Удаление всех эпиков удаляет все сабтаски, но на всякий случай вызываем удаление все сабтасков
 		deleteAllSubtask();
+		historyManager.removeAll();
 	}
 	@Override
 	public String toString() {
@@ -209,6 +211,7 @@ public class InMemoryTaskManager implements TaskManager {
 
 		for (Integer subtaskId : epic.getSubtaskIds()) {
 			subtasks.remove(subtaskId);
+			historyManager.remove(subtaskId);
 		}
 	}
 	private boolean addEpic(Epic epic, boolean update) {
