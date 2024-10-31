@@ -48,47 +48,46 @@ public class InMemoryHistoryManager implements HistoryManager {
 	private void removeNode(Node<Task> node) {
 		history.removeItem(node);
 	}
-}
 
-class PrimitiveLinkedList<T> {
-	private Node<T> first;
-	private Node<T> last;
+	private static class PrimitiveLinkedList<T> {
+		private Node<T> first;
+		private Node<T> last;
 
-	PrimitiveLinkedList() {
-	}
-
-	Node<T> linkLast(T item) {
-		Node<T> node = new Node<>(item);
-		if (first == null) {
-			first = last = node;
-		} else {
-			node.prev = last;
-			last.next = node;
-			last = node;
+		PrimitiveLinkedList() {
 		}
-		return node;
-	}
 
-	void removeItem(Node<T> item) {
-		if (item.equals(first)) first = item.next != null ? item.next : null;
-		if (item.equals(last)) last = item.prev != null ? item.prev : null;
-
-		if (item.next != null) item.next.prev = item.prev != null ? item.prev : null;
-		if (item.prev != null) item.prev.next = item.next != null ? item.next : null;
-	}
-
-	void removeAll() {
-		first = last = null;
-	}
-
-	List<T> getItems() {
-		ArrayList<T> tasks = new ArrayList<>();
-		Node<T> nextNode = first;
-		while (nextNode != null) {
-			tasks.add(nextNode.data);
-			nextNode = nextNode.next;
+		Node<T> linkLast(T item) {
+			Node<T> node = new Node<>(item);
+			if (first == null) {
+				first = last = node;
+			} else {
+				node.prev = last;
+				last.next = node;
+				last = node;
+			}
+			return node;
 		}
-		return tasks;
+
+		void removeItem(Node<T> item) {
+			if (item.equals(first)) first = item.next != null ? item.next : null;
+			if (item.equals(last)) last = item.prev != null ? item.prev : null;
+
+			if (item.next != null) item.next.prev = item.prev != null ? item.prev : null;
+			if (item.prev != null) item.prev.next = item.next != null ? item.next : null;
+		}
+
+		void removeAll() {
+			first = last = null;
+		}
+
+		List<T> getItems() {
+			ArrayList<T> tasks = new ArrayList<>();
+			Node<T> nextNode = first;
+			while (nextNode != null) {
+				tasks.add(nextNode.data);
+				nextNode = nextNode.next;
+			}
+			return tasks;
+		}
 	}
 }
-
