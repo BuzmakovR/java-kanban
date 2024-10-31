@@ -1,6 +1,7 @@
 package com.yandex.app.model;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SubtaskTest {
@@ -10,6 +11,7 @@ public class SubtaskTest {
 		Subtask subtask = new Subtask("Subtask", "Desciption1");
 		assertEquals(TaskTypes.SUBTASK, subtask.getTaskType(), "Подзадача возвращает тип отличный от SUBTASK");
 	}
+
 	@Test
 	void tasksEqualIfIdEqual() {
 		Subtask subtask1 = new Subtask("Subtask1", "Desciption1");

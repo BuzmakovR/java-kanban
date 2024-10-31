@@ -1,7 +1,9 @@
 package com.yandex.app.model;
 
 import java.util.List;
+
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class EpicTest {
@@ -11,6 +13,7 @@ class EpicTest {
 		Epic epic = new Epic("Epic", "Desciption");
 		assertEquals(TaskTypes.EPIC, epic.getTaskType(), "Эпик возвращает тип отличный от EPIC");
 	}
+
 	@Test
 	void epicsEqualIfIdEqual() {
 		Epic epic1 = new Epic("Epic1", "Desciption1");
@@ -21,6 +24,7 @@ class EpicTest {
 
 		assertEquals(epic1, epic2, "Эпики с одинаковыми ID не равны");
 	}
+
 	@Test
 	void epicStoresSubtasks() {
 		Epic epic1 = new Epic("Epic1", "Desciption1");
@@ -31,6 +35,7 @@ class EpicTest {
 		assertNotEquals(0, subtaskIds.size(), "Список подзадач в эпике пустой");
 		assertTrue(subtaskIds.contains(subtaskId), "Эпик не сохраняет добавленную задачу");
 	}
+
 	@Test
 	void epicDeleteAllSubtasks() {
 		Epic epic1 = new Epic("Epic1", "Desciption1");
@@ -41,6 +46,7 @@ class EpicTest {
 		List<Integer> subtaskIds = epic1.getSubtaskIds();
 		assertEquals(0, subtaskIds.size(), "Список подзадач в эпике не очищается");
 	}
+
 	@Test
 	void epicDeleteSubtasksById() {
 		Epic epic1 = new Epic("Epic1", "Desciption1");

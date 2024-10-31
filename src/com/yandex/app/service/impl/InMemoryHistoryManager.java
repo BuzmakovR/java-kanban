@@ -12,7 +12,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 	private final PrimitiveLinkedList<Task> history;
 	private final HashMap<Integer, Node<Task>> nodes;
 
-	public InMemoryHistoryManager(){
+	public InMemoryHistoryManager() {
 		this.history = new PrimitiveLinkedList<>();
 		this.nodes = new HashMap<>();
 	}
@@ -25,6 +25,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 		Node<Task> node = history.linkLast(task);
 		nodes.put(task.getId(), node);
 	}
+
 	@Override
 	public List<Task> getHistory() {
 		return history.getItems();
@@ -53,19 +54,21 @@ class PrimitiveLinkedList<T> {
 	private Node<T> first;
 	private Node<T> last;
 
-	PrimitiveLinkedList() {}
+	PrimitiveLinkedList() {
+	}
 
 	Node<T> linkLast(T item) {
 		Node<T> node = new Node<>(item);
 		if (first == null) {
 			first = last = node;
-		} else{
+		} else {
 			node.prev = last;
 			last.next = node;
 			last = node;
 		}
 		return node;
 	}
+
 	void removeItem(Node<T> item) {
 		if (item.equals(first)) first = item.next != null ? item.next : null;
 		if (item.equals(last)) last = item.prev != null ? item.prev : null;
@@ -73,6 +76,7 @@ class PrimitiveLinkedList<T> {
 		if (item.next != null) item.next.prev = item.prev != null ? item.prev : null;
 		if (item.prev != null) item.prev.next = item.next != null ? item.next : null;
 	}
+
 	void removeAll() {
 		first = last = null;
 	}
@@ -80,7 +84,7 @@ class PrimitiveLinkedList<T> {
 	List<T> getItems() {
 		ArrayList<T> tasks = new ArrayList<>();
 		Node<T> nextNode = first;
-		while(nextNode != null) {
+		while (nextNode != null) {
 			tasks.add(nextNode.data);
 			nextNode = nextNode.next;
 		}

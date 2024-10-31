@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class InMemoryTaskManagerTest {
@@ -23,6 +24,7 @@ public class InMemoryTaskManagerTest {
 		assertNotNull(tm.getEpics(), "Не инициализирован список эпиков в InMemoryTaskManager");
 		assertNotNull(tm.getHistoryManager(), "Не инициализирован HistoryManager в InMemoryTaskManager");
 	}
+
 	@Test
 	void addingNewTask() {
 		Task task1 = new Task("Task1", "addingNewTask");
@@ -31,6 +33,7 @@ public class InMemoryTaskManagerTest {
 		assertNotEquals(0, tasks.size(), "Список задач пуст после добавления в InMemoryTaskManager");
 		assertNotNull(tm.getItemById(task1.getId()), "Не удалось получить задачу по ID после добавления  в InMemoryTaskManager");
 	}
+
 	@Test
 	void addingNewSubtaskAndEpic() {
 		Subtask subtask1 = new Subtask("SubtaskWithoutEpic", "addingNewSubtaskWithoutEpic");
@@ -52,6 +55,7 @@ public class InMemoryTaskManagerTest {
 		assertNotEquals(0, subtasks.size(), "Список подзадач пуст после добавления в InMemoryTaskManager");
 		assertNotNull(tm.getItemById(subtask2.getId()), "Не удалось получить подзадачу после добавления по ID в InMemoryTaskManager");
 	}
+
 	@Test
 	void epicShouldBeEmptyAfterDeletingSubtasks() {
 		Task epic = new Epic("EpicEmpty", "epicShouldBeEmptyAfterDeletingSubtasks");
@@ -66,6 +70,7 @@ public class InMemoryTaskManagerTest {
 		subtasks = tm.getEpicSubtasks((Epic) epic);
 		assertEquals(0, subtasks.size(), "Список подзадач эпика не пустой после удаления подзадач");
 	}
+
 	@Test
 	void taskDoesntChangeAfterAddingToManager() {
 		Task task1 = new Task("TaskNotChange", "taskDoesntChangeAfterAddingToManager");
@@ -77,12 +82,14 @@ public class InMemoryTaskManagerTest {
 		assertEquals(task1.getDescription(), taskFromManager.getDescription(), "Задача после добавления в менеджер не соответствует добавляемой в InMemoryTaskManager: разные описания");
 		assertEquals(task1.getStatus(), taskFromManager.getStatus(), "Задача после добавления в менеджер не соответствует добавляемой в InMemoryTaskManager: разные статусы");
 	}
+
 	@Test
-	void shouldNotUpdateTaskIfItDoesntExist(){
+	void shouldNotUpdateTaskIfItDoesntExist() {
 		Task task = new Task("NotExists", "The task does not exist");
 		task.setId(-1);
 		assertFalse(tm.updateItem(task), "Обновлена задача, которой не существует в InMemoryTaskManager");
 	}
+
 	@Test
 	void fillingHistory() {
 		Task task = new Task("taskHistoryManager", "historyFilling");
@@ -92,6 +99,7 @@ public class InMemoryTaskManagerTest {
 		List<Task> history = tm.getHistory();
 		assertNotEquals(0, history.size(), "Список истории не заполняется в InMemoryTaskManager");
 	}
+
 	@Test
 	void historyStoresPreviousVersionTask() {
 		Task task = new Task("taskHistoryManager", "historyStoresPreviousVersionTask");
@@ -107,6 +115,7 @@ public class InMemoryTaskManagerTest {
 		assertNotEquals(updatedTask.getName(), taskFromHistory.getName(), "История задач хранит актуальную версию задачи в InMemoryTaskManager: актуальное наименования");
 		assertNotEquals(updatedTask.getDescription(), taskFromHistory.getDescription(), "История задач хранит актуальную версию задачи в InMemoryTaskManager: актуальное описание");
 	}
+
 	@Test
 	void managerMustSetNewEpicStatus() {
 		Task epic = new Epic("EpicStatus", "managerMustSetInProgressEpicStatus");
@@ -125,6 +134,7 @@ public class InMemoryTaskManagerTest {
 		epic = tm.getItemById(epic.getId());
 		assertEquals(epic.getStatus(), TaskStatuses.NEW, "Эпик без подзадач должен быть в статусе NEW");
 	}
+
 	@Test
 	void managerMustSetInProgressEpicStatus() {
 		Task epic = new Epic("EpicStatus", "managerMustSetInProgressEpicStatus");
