@@ -23,6 +23,7 @@ public class Task {
 	public int getId() {
 		return id;
 	}
+
 	public boolean setId(int id) {
 		if (this.id != 0) {
 			return false;
@@ -30,15 +31,19 @@ public class Task {
 		this.id = id;
 		return true;
 	}
+
 	public TaskTypes getTaskType() {
 		return TaskTypes.TASK;
 	}
+
 	public TaskStatuses getStatus() {
 		return this.status;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public String getDescription() {
 		return description;
 	}
