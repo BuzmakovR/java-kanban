@@ -3,6 +3,7 @@ package com.yandex.app.service.impl;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import com.yandex.app.model.Task;
 import com.yandex.app.service.HistoryManager;
@@ -10,7 +11,7 @@ import com.yandex.app.util.Node;
 
 public class InMemoryHistoryManager implements HistoryManager {
 	private final PrimitiveLinkedList<Task> history;
-	private final HashMap<Integer, Node<Task>> nodes;
+	private final Map<Integer, Node<Task>> nodes;
 
 	public InMemoryHistoryManager() {
 		this.history = new PrimitiveLinkedList<>();
@@ -65,11 +66,16 @@ public class InMemoryHistoryManager implements HistoryManager {
 			final Node<T> itemNext = item.getNext();
 			final Node<T> itemPrev = item.getPrev();
 
-			if (item.equals(first)) first = itemNext;
-			if (item.equals(last)) last = itemPrev;
-
-			if (itemNext != null) itemNext.setPrev(itemPrev);
-			if (itemPrev != null) itemPrev.setNext(itemNext);
+			if (item.equals(first)) {
+				first = itemNext;
+			} else {
+				itemPrev.setNext(itemNext);
+			}
+			if (item.equals(last)) {
+				last = itemPrev;
+			} else {
+				itemNext.setPrev(itemPrev);
+			}
 		}
 
 		void removeAll() {
