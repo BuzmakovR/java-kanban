@@ -17,7 +17,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 		return new FileBackedTaskManager(file);
 	}
 
-	public FileBackedTaskManager(File file) throws ManagerSaveException {
+	public FileBackedTaskManager(File file) throws ManagerLoadException {
 		super();
 		this.file = file;
 		load();
