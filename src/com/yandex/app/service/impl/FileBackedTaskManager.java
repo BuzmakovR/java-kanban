@@ -83,14 +83,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 		Task task;
 
 		try {
-			if (parts.length < CsvData.ID.getIndex()) {
+			if (CsvData.ID.getIndex() >= parts.length) {
 				throw new ManagerLoadException("Failed to get task ID");
 			}
 
 			final int id = Integer.parseInt(parts[CsvData.ID.getIndex()].trim());
-			final String name = parts.length >= CsvData.NAME.getIndex() ? parts[CsvData.NAME.getIndex()] : "";
-			final String desc = parts.length >= CsvData.DESCRIPTION.getIndex() ? parts[CsvData.DESCRIPTION.getIndex()] : "";
-			final TaskStatuses status = parts.length >= CsvData.DESCRIPTION.getIndex()
+			final String name = parts.length > CsvData.NAME.getIndex() ? parts[CsvData.NAME.getIndex()] : "";
+			final String desc = parts.length > CsvData.DESCRIPTION.getIndex() ? parts[CsvData.DESCRIPTION.getIndex()] : "";
+			final TaskStatuses status = parts.length > CsvData.STATUS.getIndex()
 					? TaskStatuses.valueOf(parts[CsvData.STATUS.getIndex()]) : null;
 
 			task = switch (TaskTypes.valueOf(parts[CsvData.TYPE.getIndex()])) {
