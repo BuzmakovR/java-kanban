@@ -37,4 +37,6 @@ public interface TaskManager {
 	void deleteAllEpics();
 
 	List<Task> getHistory();
+
+	HistoryManager getHistoryManager();
 }

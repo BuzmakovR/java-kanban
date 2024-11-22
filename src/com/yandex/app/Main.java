@@ -1,15 +1,17 @@
 package com.yandex.app;
 
+import com.yandex.app.exception.ManagerLoadException;
 import com.yandex.app.model.*;
-import com.yandex.app.service.Managers;
 import com.yandex.app.service.TaskManager;
+import com.yandex.app.service.impl.FileBackedTaskManager;
+import java.io.File;
 
 public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("Поехали!");
 
-		TaskManager tm = Managers.getDefault();
+		/*TaskManager tm = Managers.getDefault();
 		Task task1 = new Task("task1", "task1-description1");
 		tm.addNewItem(task1);
 		Task task2 = new Task("task2", "task2-description2");
@@ -51,7 +53,19 @@ public class Main {
 
 		printAllTasks(tm);
 
-		tm.deleteItemById(epic3tasks.getId());
+		tm.deleteItemById(epic3tasks.getId());*/
+		File file = new File("./data/taskManagerData.csv");
+		TaskManager tm = null;
+		try {
+			tm = FileBackedTaskManager.loadFromFile(file);
+		} catch (ManagerLoadException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+		printAllTasks(tm);
+
+		Task task2 = new Task("task2", "task2-description2");
+		tm.addNewItem(task2);
 
 		printAllTasks(tm);
 	}
