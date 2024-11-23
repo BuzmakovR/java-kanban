@@ -8,6 +8,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Optional;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
@@ -17,13 +18,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 		return new FileBackedTaskManager(file);
 	}
 
-	public FileBackedTaskManager(File file) throws ManagerLoadException {
+	public FileBackedTaskManager(File file) {
 		super();
 		this.file = file;
 		load();
 	}
 
-	protected void save() throws ManagerSaveException {
+	protected void save() {
 		List<Task> tasks = getAllItems();
 
 		try (FileWriter fw = new FileWriter(file.getPath(), StandardCharsets.UTF_8, false)) {
@@ -44,19 +45,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 		}
 	}
 
-	protected void load() throws ManagerLoadException {
+	protected void load() {
 		try {
 			String content = Files.readString(file.toPath(), StandardCharsets.UTF_8);
 			String[] lines = content.split(System.lineSeparator());
 
 			for (int i = 1; i < lines.length; i++) {
-				try {
-					Task task = taskFromString(lines[i]);
-					if (!addNewItemWithId(task)) {
-						System.out.println("[FileBackedTaskManager.load]: Failed to add task to manager: " + task.toString());
-					}
-				} catch (ManagerLoadException e) {
-					System.out.println("[FileBackedTaskManager.load]: " + e.getMessage() + ". Данные: " + lines[i]);
+				Optional<Task> optionalTask = taskFromString(lines[i]);
+				if (optionalTask.isPresent()) {
+					if (!addNewItemWithId(optionalTask.get()))
+						System.out.println("[FileBackedTaskManager.load]: Failed to add task to manager: " + optionalTask.get());
 				}
 			}
 		} catch (IOException e) {
@@ -78,13 +76,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 		return builder.append(System.lineSeparator()).toString();
 	}
 
-	protected Task taskFromString(String value) throws ManagerLoadException {
+	protected Optional<Task> taskFromString(String value) {
 		String[] parts = value.split(",");
-		Task task;
+		Optional<Task> optionalTask;
 
 		try {
 			if (CsvData.ID.getIndex() >= parts.length) {
 				throw new ManagerLoadException("Failed to get task ID");
+			}
+			if (CsvData.TYPE.getIndex() >= parts.length) {
+				throw new ManagerLoadException("Failed to get task type");
 			}
 
 			final int id = Integer.parseInt(parts[CsvData.ID.getIndex()].trim());
@@ -93,7 +94,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 			final TaskStatuses status = parts.length > CsvData.STATUS.getIndex()
 					? TaskStatuses.valueOf(parts[CsvData.STATUS.getIndex()]) : null;
 
-			task = switch (TaskTypes.valueOf(parts[CsvData.TYPE.getIndex()])) {
+			Task task = switch (TaskTypes.valueOf(parts[CsvData.TYPE.getIndex()])) {
 				case TaskTypes.TASK -> new Task(name, desc, status);
 				case TaskTypes.SUBTASK -> {
 					final int epicId = Integer.parseInt(parts[CsvData.EPIC.getIndex()].trim());
@@ -102,10 +103,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 				case TaskTypes.EPIC -> new Epic(name, desc, status);
 			};
 			task.setId(id);
-		} catch (Exception e) {
-			throw new ManagerLoadException(e.getMessage());
+			optionalTask = Optional.of(task);
+		} catch (ManagerLoadException e) {
+			optionalTask = Optional.empty();
 		}
-		return task;
+		return optionalTask;
 	}
 
 	@Override
