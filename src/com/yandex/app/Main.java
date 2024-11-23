@@ -1,57 +1,29 @@
 package com.yandex.app;
 
+import com.yandex.app.exception.ManagerLoadException;
 import com.yandex.app.model.*;
-import com.yandex.app.service.Managers;
 import com.yandex.app.service.TaskManager;
+import com.yandex.app.service.impl.FileBackedTaskManager;
+
+import java.io.File;
 
 public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("Поехали!");
 
-		TaskManager tm = Managers.getDefault();
-		Task task1 = new Task("task1", "task1-description1");
-		tm.addNewItem(task1);
+		File file = new File("./data/taskManagerData.csv");
+		TaskManager tm = null;
+		try {
+			tm = FileBackedTaskManager.loadFromFile(file);
+		} catch (ManagerLoadException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+		printAllTasks(tm);
+
 		Task task2 = new Task("task2", "task2-description2");
 		tm.addNewItem(task2);
-
-		Epic epic3tasks = new Epic("epic3tasks", "epic with 3 tasks");
-		tm.addNewItem(epic3tasks);
-		Subtask subtask1 = new Subtask("subtask1", "subtask1-description", TaskStatuses.NEW, epic3tasks.getId());
-		Subtask subtask2 = new Subtask("subtask2", "subtask2-description", TaskStatuses.NEW, epic3tasks.getId());
-		Subtask subtask3 = new Subtask("subtask3", "subtask3-description", TaskStatuses.NEW, epic3tasks.getId());
-		tm.addNewItem(subtask1);
-		tm.addNewItem(subtask2);
-		tm.addNewItem(subtask3);
-
-		Epic epicEmpty = new Epic("epicEmpty", "epic is empty");
-		tm.addNewItem(epicEmpty);
-
-		printAllTasks(tm);
-
-		tm.getItemById(task1.getId());
-		tm.getItemById(epicEmpty.getId());
-		tm.getItemById(subtask3.getId());
-		tm.getItemById(subtask2.getId());
-		tm.getItemById(subtask1.getId());
-		tm.getItemById(epic3tasks.getId());
-		tm.getItemById(task2.getId());
-
-		tm.getItemById(task1.getId());
-		tm.getItemById(task2.getId());
-		tm.getItemById(epicEmpty.getId());
-		tm.getItemById(epic3tasks.getId());
-		tm.getItemById(subtask1.getId());
-		tm.getItemById(subtask2.getId());
-		tm.getItemById(subtask3.getId());
-
-		printAllTasks(tm);
-
-		tm.deleteItemById(task2.getId());
-
-		printAllTasks(tm);
-
-		tm.deleteItemById(epic3tasks.getId());
 
 		printAllTasks(tm);
 	}

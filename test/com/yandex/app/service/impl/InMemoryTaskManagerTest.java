@@ -4,7 +4,8 @@ import com.yandex.app.model.Epic;
 import com.yandex.app.model.Subtask;
 import com.yandex.app.model.Task;
 import com.yandex.app.model.TaskStatuses;
-import org.junit.jupiter.api.BeforeAll;
+import com.yandex.app.service.TaskManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,10 +14,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class InMemoryTaskManagerTest {
 
-	private static InMemoryTaskManager tm;
+	protected static TaskManager tm;
 
-	@BeforeAll
-	static void creatingTaskManager() {
+	@BeforeEach
+	void creatingTaskManager() {
 		tm = new InMemoryTaskManager();
 		assertNotNull(tm, "Не инициализирован экземпляр класса InMemoryTaskManager");
 		assertNotNull(tm.getTasks(), "Не инициализирован список задач в InMemoryTaskManager");
@@ -224,7 +225,6 @@ public class InMemoryTaskManagerTest {
 	@Test
 	void testDeletedHistory() {
 		// Кейс пользовательского сценария (6 спринт)
-		tm = new InMemoryTaskManager();
 
 		Task task1 = new Task("task1", "task1-description1");
 		tm.addNewItem(task1);

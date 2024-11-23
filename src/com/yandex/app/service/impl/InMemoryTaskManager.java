@@ -9,10 +9,10 @@ import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 	private int nextId;
-	private final Map<Integer, Task> tasks;
-	private final Map<Integer, Subtask> subtasks;
-	private final Map<Integer, Epic> epics;
-	private final HistoryManager historyManager;
+	protected final Map<Integer, Task> tasks;
+	protected final Map<Integer, Subtask> subtasks;
+	protected final Map<Integer, Epic> epics;
+	protected final HistoryManager historyManager;
 
 	public InMemoryTaskManager() {
 		nextId = 1;
@@ -20,6 +20,14 @@ public class InMemoryTaskManager implements TaskManager {
 		subtasks = new HashMap<>();
 		epics = new HashMap<>();
 		historyManager = Managers.getDefaultHistory();
+	}
+
+	protected boolean addNewItemWithId(Task t) {
+		if (taskIdIsEmpty(t)) {
+			return false;
+		}
+		setCorrectNextId(t.getId());
+		return addItem(t, false);
 	}
 
 	@Override
@@ -54,8 +62,8 @@ public class InMemoryTaskManager implements TaskManager {
 	@Override
 	public List<Task> getAllItems() {
 		List<Task> items = new ArrayList<>(tasks.values());
-		items.addAll(subtasks.values());
 		items.addAll(epics.values());
+		items.addAll(subtasks.values());
 		return items;
 	}
 
@@ -102,9 +110,22 @@ public class InMemoryTaskManager implements TaskManager {
 		return nextId++;
 	}
 
-	private boolean addItem(Task t, boolean update) {
+	private void setCorrectNextId(int id) {
+		if (id >= nextId) {
+			nextId = ++id;
+		}
+	}
+
+	private boolean taskIdIsEmpty(Task t) {
 		if (t.getId() == 0) {
 			System.out.println("Failed to determine the task ID: " + t);
+			return true;
+		}
+		return false;
+	}
+
+	private boolean addItem(Task t, boolean update) {
+		if (taskIdIsEmpty(t)) {
 			return false;
 		}
 		switch (t.getTaskType()) {
