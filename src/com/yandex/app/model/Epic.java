@@ -1,24 +1,35 @@
 package com.yandex.app.model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 
 public class Epic extends Task {
 	private final List<Integer> subtaskIds;
+	private LocalDateTime endTime;
 
 	public Epic(String name, String description) {
-		super(name, description, TaskStatuses.NEW);
-		subtaskIds = new ArrayList<>();
+		super(name, description);
+		this.subtaskIds = new ArrayList<>();
 	}
 
 	public Epic(String name, String description, TaskStatuses status) {
 		super(name, description, status);
-		subtaskIds = new ArrayList<>();
+		this.subtaskIds = new ArrayList<>();
 	}
 
 	public Epic(String name, String description, TaskStatuses status, List<Integer> subtaskIds) {
-		super(name, description, status);
+		super(name, description);
+		this.status = status;
 		this.subtaskIds = subtaskIds;
+	}
+
+	public Epic(String name, String description, TaskStatuses status, List<Integer> subtaskIds, LocalDateTime startDate,
+				Duration duration, LocalDateTime endTime) {
+		super(name, description, status, startDate, duration);
+		this.subtaskIds = subtaskIds;
+		this.endTime = endTime;
 	}
 
 	public List<Integer> getSubtaskIds() {
@@ -28,6 +39,11 @@ public class Epic extends Task {
 	@Override
 	public TaskTypes getTaskType() {
 		return TaskTypes.EPIC;
+	}
+
+	@Override
+	public LocalDateTime getEndTime() {
+		return endTime;
 	}
 
 	@Override

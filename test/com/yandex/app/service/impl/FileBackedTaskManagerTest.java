@@ -9,9 +9,11 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
 
@@ -22,10 +24,26 @@ public class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
 	TaskManager loadTaskManager() {
 		try {
 			tm = FileBackedTaskManager.loadFromFile(fileLoad);
-		} catch (ManagerLoadException e) {
+		} catch (ManagerLoadException | IOException e) {
 			Assertions.fail(e.getMessage());
 		}
+		checkTaskManagerInit();
 		return tm;
+	}
+
+	@Override
+	@Test
+	void creatingTaskManager() {
+		tm = loadTaskManager();
+		checkTaskManagerInit();
+	}
+
+	@Test
+	void getNotExistsFile() {
+		File file = new File("./data/taskManagerData-NotExists.csv");
+		assertThrows(NoSuchFileException.class, () -> {
+			tm = FileBackedTaskManager.loadFromFile(file);
+		}, "Загрузки из несуществующего файла должна выдавать NoSuchFileException");
 	}
 
 	void checkManagerDataAfterLoad(TaskManager tmBeforeLoad) {
@@ -164,6 +182,21 @@ public class FileBackedTaskManagerTest extends InMemoryTaskManagerTest {
 	void testDeletedHistory() {
 		tm = loadTaskManager();
 		super.testDeletedHistory();
+		checkManagerDataAfterLoad(tm);
+	}
+
+	@Override
+	@Test
+	void testTasksOverlapInTime() {
+		tm = loadTaskManager();
+		super.testTasksOverlapInTime();
+		checkManagerDataAfterLoad(tm);
+	}
+
+	@Override
+	void testDeleteMethods() {
+		tm = loadTaskManager();
+		super.testDeleteMethods();
 		checkManagerDataAfterLoad(tm);
 	}
 }
