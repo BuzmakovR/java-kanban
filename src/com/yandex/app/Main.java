@@ -6,6 +6,7 @@ import com.yandex.app.service.TaskManager;
 import com.yandex.app.service.impl.FileBackedTaskManager;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Main {
 
@@ -13,12 +14,14 @@ public class Main {
 		System.out.println("Поехали!");
 
 		File file = new File("./data/taskManagerData.csv");
-		TaskManager tm = null;
+		TaskManager tm;
 		try {
 			tm = FileBackedTaskManager.loadFromFile(file);
 		} catch (ManagerLoadException e) {
 			System.out.println(e.getMessage());
 			return;
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 		printAllTasks(tm);
 
