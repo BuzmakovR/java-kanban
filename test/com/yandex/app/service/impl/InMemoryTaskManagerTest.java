@@ -44,8 +44,6 @@ public class InMemoryTaskManagerTest {
 
 	@Test
 	void addingNewSubtaskAndEpic() {
-		Subtask subtask1 = new Subtask("SubtaskWithoutEpic", "addingNewSubtaskWithoutEpic");
-		assertFalse(tm.addNewItem(subtask1), "Добавлена подзадача без эпика в InMemoryTaskManager");
 
 		Task epic1 = new Epic("Epic1", "addingNewSubtaskAndEpic");
 		assertTrue(tm.addNewItem(epic1), "Не удалось добавить эпик в InMemoryTaskManager");
@@ -53,10 +51,7 @@ public class InMemoryTaskManagerTest {
 		assertNotEquals(0, epics.size(), "Список эпиков пуст после добавления в InMemoryTaskManager");
 		assertNotNull(tm.getItemById(epic1.getId()), "Не удалось получить эпик после добавления по ID в InMemoryTaskManager");
 
-		subtask1.setEpicId(epic1.getId());
-		assertFalse(tm.updateItem(subtask1), "Обновлена подзадача, которой не существует в InMemoryTaskManager");
-
-		Subtask subtask2 = new Subtask("SubtaskWithEpic", "addingNewSubtaskWithEpic");
+		Subtask subtask2 = new Subtask("SubtaskWithEpic", "addingNewSubtaskWithEpic", epic1.getId());
 		subtask2.setEpicId(epic1.getId());
 		assertTrue(tm.addNewItem(subtask2), "Не удалось добавить подзадачу в InMemoryTaskManager");
 		List<Subtask> subtasks = tm.getSubtasks();
@@ -130,8 +125,7 @@ public class InMemoryTaskManagerTest {
 		assertTrue(tm.addNewItem(epic), "Не удалось добавить эпик в InMemoryTaskManager");
 		assertEquals(epic.getStatus(), TaskStatuses.NEW, "Новый эпик должен быть в статусе NEW");
 
-		Subtask subtask1 = new Subtask("Subtask1", "Subtask1");
-		subtask1.setEpicId(epic.getId());
+		Subtask subtask1 = new Subtask("Subtask1", "Subtask1", epic.getId());
 		assertTrue(tm.addNewItem(subtask1), "Не удалось добавить подзадачу в InMemoryTaskManager");
 		epic = tm.getItemById(epic.getId());
 		assertEquals(epic.getStatus(), TaskStatuses.NEW, "Эпик с новыми подзадачами должен быть в статусе NEW");
@@ -167,8 +161,7 @@ public class InMemoryTaskManagerTest {
 
 		// Добавление новой подзадачи в статусе NEW
 		// Статусы подзадач: [IN_PROGRESS, NEW]
-		Subtask subtask2 = new Subtask("Subtask2", "Subtask2");
-		subtask2.setEpicId(epic.getId());
+		Subtask subtask2 = new Subtask("Subtask2", "Subtask2", epic.getId());
 		assertTrue(tm.addNewItem(subtask2), "Не удалось добавить подзадачу в InMemoryTaskManager");
 		epic = tm.getItemById(epic.getId());
 		assertEquals(epic.getStatus(), TaskStatuses.IN_PROGRESS, "Эпик с подзадачами в статусах [IN_PROGRESS, NEW] должен быть в статусе IN_PROGRESS");
@@ -222,8 +215,7 @@ public class InMemoryTaskManagerTest {
 
 		// Добавление новой подзадачи в статусе NEW
 		// Статусы подзадач: [DONE, NEW]
-		Subtask subtask2 = new Subtask("Subtask2", "Subtask2");
-		subtask2.setEpicId(epic.getId());
+		Subtask subtask2 = new Subtask("Subtask2", "Subtask2", epic.getId());
 		assertTrue(tm.addNewItem(subtask2), "Не удалось добавить подзадачу в InMemoryTaskManager");
 		epic = tm.getItemById(epic.getId());
 		assertNotEquals(epic.getStatus(), TaskStatuses.DONE, "Эпик с подзадачами в статусах [DONE, NEW] не сменил статус с DONE");

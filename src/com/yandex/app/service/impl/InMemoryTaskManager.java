@@ -321,30 +321,38 @@ public class InMemoryTaskManager implements TaskManager {
 	}
 
 	private void updateEpicDataBySubtasks(Epic epic) {
-		TaskStatuses newStatus = calculateEpicStatus(epic);
-		Optional<LocalDateTime> optionalStartDate = epic.getSubtaskIds().stream()
+		LocalDateTime startDate = calculateEpicStartDate(epic);
+
+		Epic newEpic = new Epic(epic.getName(), epic.getDescription(),
+				calculateEpicStatus(epic),
+				epic.getSubtaskIds(),
+				startDate,
+				calculateEpicDuration(epic),
+				(startDate != null ? calculateEpicEndDate(epic) : null));
+		newEpic.setId(epic.getId());
+		updateItem(newEpic);
+	}
+
+	private LocalDateTime calculateEpicStartDate(Epic epic) {
+		return epic.getSubtaskIds().stream()
 				.map(subtaskId -> this.subtasks.get(subtaskId).getStartTime())
 				.filter(startTime -> Optional.ofNullable(startTime).isPresent())
-				.min(Comparator.naturalOrder());
-		LocalDateTime startDate = optionalStartDate.orElse(null);
+				.min(Comparator.naturalOrder()).orElse(null);
+	}
 
+	private LocalDateTime calculateEpicEndDate(Epic epic) {
+		return epic.getSubtaskIds().stream()
+				.map(this.subtasks::get)
+				.filter(subtask -> Optional.ofNullable(subtask.getStartTime()).isPresent())
+				.max(Comparator.comparing(Subtask::getStartTime))
+				.map(Task::getEndTime).orElse(null);
+	}
+
+	private Duration calculateEpicDuration(Epic epic) {
 		Duration duration = epic.getSubtaskIds().stream()
 				.map(subtaskId -> this.subtasks.get(subtaskId).getDuration())
 				.reduce(Duration.ZERO, Duration::plus);
-
-		Optional<Subtask> lastSubtask = Optional.empty();
-		if (startDate != null) {
-			lastSubtask = epic.getSubtaskIds().stream()
-					.map(this.subtasks::get)
-					.filter(subtask -> Optional.ofNullable(subtask.getStartTime()).isPresent())
-					.max(Comparator.comparing(Subtask::getStartTime));
-		}
-		Epic newEpic = new Epic(epic.getName(), epic.getDescription(), newStatus, epic.getSubtaskIds(),
-				startDate,
-				(duration.toMinutes() > 0 ? duration : null),
-				(lastSubtask.map(Task::getEndTime).orElse(null)));
-		newEpic.setId(epic.getId());
-		updateItem(newEpic);
+		return duration.toMinutes() > 0 ? duration : null;
 	}
 
 	private TaskStatuses calculateEpicStatus(Epic epic) {
