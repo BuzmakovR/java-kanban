@@ -12,7 +12,13 @@ import java.util.Optional;
 
 public class TaskHandler extends BaseHttpHandler {
 
-	private enum Endpoint {GET_TASKS, GET_TASK, POST_TASK, DELETE_TASK, UNKNOWN}
+	private enum Endpoint {
+		GET_TASKS,
+		GET_TASK,
+		POST_TASK,
+		DELETE_TASK,
+		UNKNOWN
+	}
 
 	protected TaskManager taskManager;
 	protected Gson gson;

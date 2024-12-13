@@ -9,7 +9,10 @@ import java.util.Objects;
 
 public class HistoryHandler extends BaseHttpHandler {
 
-	private enum Endpoint {GET_HISTORY, UNKNOWN}
+	private enum Endpoint {
+		GET_HISTORY,
+		UNKNOWN
+	}
 
 	protected TaskManager taskManager;
 	protected Gson gson;

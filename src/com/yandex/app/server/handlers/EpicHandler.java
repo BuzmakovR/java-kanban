@@ -13,7 +13,13 @@ import java.util.Optional;
 
 public class EpicHandler extends TaskHandler {
 
-	private enum Endpoint {GET_EPICS, GET_EPIC, GET_EPIC_SUBTASKS, POST_EPIC, DELETE_EPIC, UNKNOWN}
+	private enum Endpoint {
+		GET_EPICS, GET_EPIC,
+		GET_EPIC_SUBTASKS,
+		POST_EPIC,
+		DELETE_EPIC,
+		UNKNOWN
+	}
 
 	public EpicHandler(TaskManager taskManager, Gson gson) {
 		super(taskManager, gson);

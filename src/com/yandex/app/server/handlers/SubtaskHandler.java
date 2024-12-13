@@ -13,7 +13,13 @@ import java.util.Optional;
 
 public class SubtaskHandler extends TaskHandler {
 
-	private enum Endpoint {GET_SUBTASKS, GET_SUBTASK, POST_SUBTASK, DELETE_SUBTASK, UNKNOWN}
+	private enum Endpoint {
+		GET_SUBTASKS,
+		GET_SUBTASK,
+		POST_SUBTASK,
+		DELETE_SUBTASK,
+		UNKNOWN
+	}
 
 	public SubtaskHandler(TaskManager taskManager, Gson gson) {
 		super(taskManager, gson);

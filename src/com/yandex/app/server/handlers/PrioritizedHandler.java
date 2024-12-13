@@ -9,7 +9,10 @@ import java.util.Objects;
 
 public class PrioritizedHandler extends BaseHttpHandler {
 
-	private enum Endpoint {GET_PRIORITIZED, UNKNOWN}
+	private enum Endpoint {
+		GET_PRIORITIZED,
+		UNKNOWN
+	}
 
 	protected TaskManager taskManager;
 	protected Gson gson;
