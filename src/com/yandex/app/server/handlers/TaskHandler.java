@@ -35,22 +35,17 @@ public class TaskHandler extends BaseHttpHandler {
 		try {
 			switch (endpoint) {
 				case GET_TASKS -> sendSuccess(exchange, gson.toJson(taskManager.getTasks()));
-				case GET_TASK, DELETE_TASK -> {
+				case GET_TASK -> {
 					taskId = getTaskId(exchange.getRequestURI().getPath());
 					if (taskId.isEmpty()) {
 						sendNotAcceptable(exchange, "Некорректный идентификатор задачи");
 						return;
 					}
-					if (endpoint == Endpoint.GET_TASK) {
-						Optional<Task> taskOpt = Optional.ofNullable(taskManager.getItemById(taskId.get()));
-						if (taskOpt.isEmpty()) {
-							sendNotFound(exchange, "Не удалось получить задачу с данным идентификатором");
-						} else {
-							sendSuccess(exchange, gson.toJson(taskOpt.get()));
-						}
+					Optional<Task> taskOpt = Optional.ofNullable(taskManager.getItemById(taskId.get()));
+					if (taskOpt.isEmpty()) {
+						sendNotFound(exchange, "Не удалось получить задачу с данным идентификатором");
 					} else {
-						taskManager.deleteItemById(taskId.get());
-						sendSuccess(exchange, "");
+						sendSuccess(exchange, gson.toJson(taskOpt.get()));
 					}
 				}
 				case POST_TASK -> {
@@ -64,6 +59,15 @@ public class TaskHandler extends BaseHttpHandler {
 					} else {
 						sendNotAcceptable(exchange, "Не удалось добавить задачу");
 					}
+				}
+				case DELETE_TASK -> {
+					taskId = getTaskId(exchange.getRequestURI().getPath());
+					if (taskId.isEmpty()) {
+						sendNotAcceptable(exchange, "Некорректный идентификатор задачи");
+						return;
+					}
+					taskManager.deleteItemById(taskId.get());
+					sendSuccess(exchange, "");
 				}
 				default -> sendNotFound(exchange, "");
 			}

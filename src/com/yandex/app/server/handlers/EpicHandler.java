@@ -32,24 +32,21 @@ public class EpicHandler extends TaskHandler {
 		try {
 			switch (endpoint) {
 				case GET_EPICS -> sendSuccess(exchange, gson.toJson(taskManager.getEpics()));
-				case GET_EPIC, GET_EPIC_SUBTASKS, DELETE_EPIC -> {
+				case GET_EPIC, GET_EPIC_SUBTASKS -> {
 					taskId = getTaskId(exchange.getRequestURI().getPath());
 					if (taskId.isEmpty()) {
 						sendNotAcceptable(exchange, "Некорректный идентификатор эпика");
 						return;
 					}
-					if (endpoint == Endpoint.GET_EPIC) {
-						Optional<Task> taskOpt = Optional.ofNullable(taskManager.getItemById(taskId.get()));
-						if (taskOpt.isEmpty() || taskOpt.get().getTaskType() != TaskTypes.EPIC) {
-							sendNotFound(exchange, "Не удалось получить эпик с данным идентификатором");
-						} else {
-							sendSuccess(exchange, gson.toJson(taskOpt.get()));
-						}
-					} else if (endpoint == Endpoint.GET_EPIC_SUBTASKS) {
-						sendSuccess(exchange, gson.toJson(taskManager.getEpicSubtasksById(taskId.get())));
+					Optional<Task> taskOpt = Optional.ofNullable(taskManager.getItemById(taskId.get()));
+					if (taskOpt.isEmpty() || taskOpt.get().getTaskType() != TaskTypes.EPIC) {
+						sendNotFound(exchange, "Не удалось получить эпик с данным идентификатором");
+						return;
+					}
+					if (endpoint == Endpoint.GET_EPIC_SUBTASKS) {
+						sendSuccess(exchange, gson.toJson(taskManager.getEpicSubtasksById(taskOpt.get().getId())));
 					} else {
-						taskManager.deleteItemById(taskId.get());
-						sendSuccess(exchange, "");
+						sendSuccess(exchange, gson.toJson(taskOpt.get()));
 					}
 				}
 				case POST_EPIC -> {
@@ -63,6 +60,15 @@ public class EpicHandler extends TaskHandler {
 					} else {
 						sendNotAcceptable(exchange, "Не удалось добавить эпик");
 					}
+				}
+				case DELETE_EPIC -> {
+					taskId = getTaskId(exchange.getRequestURI().getPath());
+					if (taskId.isEmpty()) {
+						sendNotAcceptable(exchange, "Некорректный идентификатор эпика");
+						return;
+					}
+					taskManager.deleteItemById(taskId.get());
+					sendSuccess(exchange, "");
 				}
 				default -> sendNotFound(exchange, "");
 			}

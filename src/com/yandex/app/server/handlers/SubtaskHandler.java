@@ -32,22 +32,17 @@ public class SubtaskHandler extends TaskHandler {
 		try {
 			switch (endpoint) {
 				case GET_SUBTASKS -> sendSuccess(exchange, gson.toJson(taskManager.getSubtasks()));
-				case GET_SUBTASK, DELETE_SUBTASK -> {
+				case GET_SUBTASK -> {
 					taskId = getTaskId(exchange.getRequestURI().getPath());
 					if (taskId.isEmpty()) {
 						sendNotAcceptable(exchange, "Некорректный идентификатор подзадачи");
 						return;
 					}
-					if (endpoint == Endpoint.GET_SUBTASK) {
-						Optional<Task> taskOpt = Optional.ofNullable(taskManager.getItemById(taskId.get()));
-						if (taskOpt.isEmpty() || taskOpt.get().getTaskType() != TaskTypes.SUBTASK) {
-							sendNotFound(exchange, "Не удалось получить подзадачу с данным идентификатором");
-						} else {
-							sendSuccess(exchange, gson.toJson(taskOpt.get()));
-						}
+					Optional<Task> taskOpt = Optional.ofNullable(taskManager.getItemById(taskId.get()));
+					if (taskOpt.isEmpty() || taskOpt.get().getTaskType() != TaskTypes.SUBTASK) {
+						sendNotFound(exchange, "Не удалось получить подзадачу с данным идентификатором");
 					} else {
-						taskManager.deleteItemById(taskId.get());
-						sendSuccess(exchange, "");
+						sendSuccess(exchange, gson.toJson(taskOpt.get()));
 					}
 				}
 				case POST_SUBTASK -> {
@@ -61,6 +56,15 @@ public class SubtaskHandler extends TaskHandler {
 					} else {
 						sendNotAcceptable(exchange, "Не удалось добавить подзадачу");
 					}
+				}
+				case DELETE_SUBTASK -> {
+					taskId = getTaskId(exchange.getRequestURI().getPath());
+					if (taskId.isEmpty()) {
+						sendNotAcceptable(exchange, "Некорректный идентификатор подзадачи");
+						return;
+					}
+					taskManager.deleteItemById(taskId.get());
+					sendSuccess(exchange, "");
 				}
 				default -> sendNotFound(exchange, "");
 			}
